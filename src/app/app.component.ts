@@ -8,15 +8,23 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule],
   template: `
     <div class="container">
-      <h1>{{title}}</h1>
+      <h1>{{ title }}</h1>
       <div class="form-grid">
         <div class="form-group">
           <label>Kredi Tutarı</label>
-          <input [(ngModel)]="krediTutari" (ngModelChange)="formatKrediTutari($event)" type="text">
+          <input
+            [(ngModel)]="krediTutari"
+            (ngModelChange)="formatKrediTutari($event)"
+            type="text"
+          />
         </div>
         <div class="form-group">
           <label>Faiz Oranı</label>
-          <input [(ngModel)]="faizOrani" (ngModelChange)="formatFaizOrani($event)" type="text">
+          <input
+            [(ngModel)]="faizOrani"
+            (ngModelChange)="formatFaizOrani($event)"
+            type="text"
+          />
         </div>
         <div class="form-group">
           <label>Taksit Sayısı</label>
@@ -28,13 +36,23 @@ import { CommonModule } from '@angular/common';
       <div class="button-container">
         <button (click)="hesapla()">Hesapla</button>
       </div>
-      <hr>
+      <hr />
       <div class="result-container" *ngIf="hesaplandi">
-        <p><strong>Taksit Tutarı:</strong> {{taksitTutari| currency:'₺':'symbol-narrow'}}</p>
-        <p><strong>Taksit Sayısı:</strong> {{taksitSayisi}}</p>
-        <p><strong>Toplam Geri Ödeme:</strong> {{toplamGeriOdeme| currency:'₺':'symbol-narrow'}}</p>
+        <p>
+          <strong>Taksit Tutarı:</strong>
+          {{ taksitTutari | currency : '₺' : 'symbol-narrow' }}
+        </p>
+        <p><strong>Taksit Sayısı:</strong> {{ taksitSayisi }}</p>
+        <p>
+          <strong>Toplam Geri Ödeme:</strong>
+          {{ toplamGeriOdeme | currency : '₺' : 'symbol-narrow' }}
+        </p>
+        <p>
+          <strong>Ödenecek Faiz Tutarı:</strong>
+          {{ toplamOdenenFaiz | currency : '₺' : 'symbol-narrow' }}
+        </p>
       </div>
-      <hr>
+      <hr />
       <div class="table-container" *ngIf="hesaplandi">
         <table>
           <thead>
@@ -46,15 +64,15 @@ import { CommonModule } from '@angular/common';
           </thead>
           <tbody>
             <tr *ngFor="let data of odemePlani; let i = index">
-              <td>{{i + 1}}</td>
-              <td>{{data.taksitTutari| currency:'₺':'symbol'}}</td>
-              <td>{{data.kalanGeriOdeme| currency:'₺':'symbol'}}</td>
+              <td>{{ i + 1 }}</td>
+              <td>{{ data.taksitTutari | currency : '₺' : 'symbol' }}</td>
+              <td>{{ data.kalanGeriOdeme | currency : '₺' : 'symbol' }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  `
+  `,
 })
 export class AppComponent {
   title = 'KREDİMİ HESAPLA';
@@ -67,8 +85,9 @@ export class AppComponent {
   taksitTutari: number = 0;
   toplamGeriOdeme: number = 0;
   hesaplandi: boolean = false;
+  toplamOdenenFaiz: number = 0;
 
-  odemePlani: { taksitTutari: number, kalanGeriOdeme: number }[] = [];
+  odemePlani: { taksitTutari: number; kalanGeriOdeme: number }[] = [];
 
   formatFaizOrani(value: string) {
     this.faizOrani = parseFloat(value.replace(',', '.'));
@@ -78,10 +97,14 @@ export class AppComponent {
     const temizlenmisDeger = value.replace(/[^0-9,]/g, '').replace(',', '.');
     this.krediTutari = parseFloat(temizlenmisDeger) || 0;
   }
-
+  odenecekFaizTutarı() {
+    this.toplamOdenenFaiz = Math.round(this.toplamGeriOdeme - this.krediTutari);
+  }
 
   hesapla() {
-    this.taksitTutari = Math.round((this.krediTutari / this.taksitSayisi) * this.faizOrani);
+    this.taksitTutari = Math.round(
+      (this.krediTutari / this.taksitSayisi) * this.faizOrani
+    );
     this.toplamGeriOdeme = Math.round(this.taksitTutari * this.taksitSayisi);
     this.hesaplandi = true;
 
@@ -91,9 +114,11 @@ export class AppComponent {
       kalanGeriOdeme -= this.taksitTutari;
       const data = {
         taksitTutari: this.taksitTutari,
-        kalanGeriOdeme: Math.round(kalanGeriOdeme)
+        kalanGeriOdeme: Math.round(kalanGeriOdeme),
       };
       this.odemePlani.push(data);
     }
+
+    this.odenecekFaizTutarı();
   }
 }
