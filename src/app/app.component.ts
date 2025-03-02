@@ -7,41 +7,49 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
-    <h1>{{title}}</h1>
-    <div>
-      <label>Kredi Tutarı</label>
-      <input [(ngModel)]="krediTutari">
-      <label>Faiz Oranı</label>
-      <input [(ngModel)]="faizOrani" (ngModelChange)="formatFaizOrani($event)">
+     <div class="container">
+      <h1>{{title}}</h1>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Kredi Tutarı</label>
+          <input [(ngModel)]="krediTutari" type="number">
+        </div>
+        <div class="form-group">
+          <label>Faiz Oranı</label>
+          <input [(ngModel)]="faizOrani" (ngModelChange)="formatFaizOrani($event)" type="text">
+        </div>
+        <div class="form-group">
+          <label>Taksit Sayısı</label>
+          <select [(ngModel)]="taksitSayisi">
+            <option *ngFor="let data of taksitler">{{ data }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="button-container">
+        <button (click)="hesapla()">Hesapla</button>
+      </div>
+      <hr>
+      <h1>{{result}}</h1>
+      <hr>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Taksit</th>
+              <th>Taksit Tutarı</th>
+              <th>Kalan Geri Ödeme</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of odemePlani; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{data.taksitTutari}}</td>
+              <td>{{data.kalanGeriOdeme}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div>
-      <label>Taksit Sayısı</label>
-      <select [(ngModel)]="taksitSayisi">
-        <option *ngFor="let data of taksitler">{{ data }}</option>
-      </select>
-    </div>
-    <div>
-      <button (click)="hesapla()">Hesapla</button>
-    </div>
-    <hr>
-    <h1>{{result}}</h1>
-    <hr>
-    <table>
-      <thead>
-        <tr>
-          <th>Taksit</th>
-          <th>Taksit Tutarı</th>
-          <th>Kalan Geri Ödeme</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of odemePlani; let i = index">
-          <td>{{i + 1}}</td>
-          <td>{{data.taksitTutari}}</td>
-          <td>{{data.kalanGeriOdeme}}</td>
-        </tr>
-      </tbody>
-    </table>
   `
 })
 export class AppComponent {
