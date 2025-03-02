@@ -1,27 +1,22 @@
-# CreditCalculationFrontend
+# Credit Calculation Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+This project is an Angular application that allows users to quickly calculate their repayment plan by entering the loan amount, interest rate, and installment number.
 
-## Development server
+## Demo
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+You can try the live application at the following link:
+[Credit Calculator Live Demo](https://credit-calculator-frontend.vercel.app/)
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Generates a repayment plan based on loan amount, interest rate, and installment number.
+- Instantly calculates results based on user inputs.
+- Ensures correct conversion by using `.` instead of `,` in the entered interest rate.
+- Displays the repayment plan in a tabular format.
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+1. Enter the loan amount in the **Loan Amount** field.
+2. Enter the interest rate in the **Interest Rate** field (e.g., 1.5 or 2.75).
+3. Select the number of months for repayment in the **Installment Number** field.
+4. Click the **Calculate** button to view your repayment plan.
