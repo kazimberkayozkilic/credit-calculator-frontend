@@ -47,3 +47,22 @@ th, td {
 th {
   background-color: #f4f4f4;
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+@media (max-width: 768px) {
+  select {
+    font-size: 14px;
+    padding: 8px 10px;
+    width: 100%;
+  }
+}
+select {
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  width: 100%;
+}
