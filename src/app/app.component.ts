@@ -7,12 +7,12 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule],
   template: `
-     <div class="container">
+    <div class="container">
       <h1>{{title}}</h1>
       <div class="form-grid">
         <div class="form-group">
           <label>Kredi Tutarı</label>
-          <input [(ngModel)]="krediTutari" type="number">
+          <input [(ngModel)]="krediTutari" (ngModelChange)="formatKrediTutari($event)" type="text">
         </div>
         <div class="form-group">
           <label>Faiz Oranı</label>
@@ -29,9 +29,13 @@ import { CommonModule } from '@angular/common';
         <button (click)="hesapla()">Hesapla</button>
       </div>
       <hr>
-      <h1>{{result}}</h1>
+      <div class="result-container" *ngIf="hesaplandi">
+        <p><strong>Taksit Tutarı:</strong> {{taksitTutari| currency:'₺':'symbol-narrow'}}</p>
+        <p><strong>Taksit Sayısı:</strong> {{taksitSayisi}}</p>
+        <p><strong>Toplam Geri Ödeme:</strong> {{toplamGeriOdeme| currency:'₺':'symbol-narrow'}}</p>
+      </div>
       <hr>
-      <div class="table-container">
+      <div class="table-container" *ngIf="hesaplandi">
         <table>
           <thead>
             <tr>
@@ -43,8 +47,8 @@ import { CommonModule } from '@angular/common';
           <tbody>
             <tr *ngFor="let data of odemePlani; let i = index">
               <td>{{i + 1}}</td>
-              <td>{{data.taksitTutari}}</td>
-              <td>{{data.kalanGeriOdeme}}</td>
+              <td>{{data.taksitTutari| currency:'₺':'symbol'}}</td>
+              <td>{{data.kalanGeriOdeme| currency:'₺':'symbol'}}</td>
             </tr>
           </tbody>
         </table>
@@ -60,28 +64,35 @@ export class AppComponent {
   taksitler: number[] = [3, 6, 12, 24];
 
   result: string = '';
+  taksitTutari: number = 0;
+  toplamGeriOdeme: number = 0;
+  hesaplandi: boolean = false;
 
   odemePlani: { taksitTutari: number, kalanGeriOdeme: number }[] = [];
 
-  // Method to format faizOrani when user enters comma
   formatFaizOrani(value: string) {
     this.faizOrani = parseFloat(value.replace(',', '.'));
   }
 
-  hesapla() {
-    const taksitTutari: number = Math.round((this.krediTutari / this.taksitSayisi) * this.faizOrani);
-    let toplamGeriOdeme: number = Math.round(taksitTutari * this.taksitSayisi);
+  formatKrediTutari(value: string) {
+    const temizlenmisDeger = value.replace(/[^0-9,]/g, '').replace(',', '.');
+    this.krediTutari = parseFloat(temizlenmisDeger) || 0;
+  }
 
-    this.result = `Taksit Tutarı: ${taksitTutari} - Taksit Sayısı: ${this.taksitSayisi} - Toplam Geri Ödeme: ${toplamGeriOdeme}`;
+
+  hesapla() {
+    this.taksitTutari = Math.round((this.krediTutari / this.taksitSayisi) * this.faizOrani);
+    this.toplamGeriOdeme = Math.round(this.taksitTutari * this.taksitSayisi);
+    this.hesaplandi = true;
 
     this.odemePlani = [];
+    let kalanGeriOdeme = this.toplamGeriOdeme;
     for (let i = 0; i < this.taksitSayisi; i++) {
-      toplamGeriOdeme -= taksitTutari;
+      kalanGeriOdeme -= this.taksitTutari;
       const data = {
-        taksitTutari: taksitTutari,
-        kalanGeriOdeme: Math.round(toplamGeriOdeme)
+        taksitTutari: this.taksitTutari,
+        kalanGeriOdeme: Math.round(kalanGeriOdeme)
       };
-
       this.odemePlani.push(data);
     }
   }
