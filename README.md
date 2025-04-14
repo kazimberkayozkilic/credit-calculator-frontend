@@ -12,7 +12,6 @@ You can try the live application at the following link:
 - Generates a repayment plan based on loan amount, interest rate, and installment number.
 - Instantly calculates results based on user inputs.
 - Ensures correct conversion by using `.` instead of `,` in the entered interest rate.
-- Displays the repayment plan in a tabular format.
 
 ## Usage
 
