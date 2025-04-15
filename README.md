@@ -16,6 +16,6 @@ You can try the live application at the following link:
 ## Usage
 
 1. Enter the loan amount in the **Loan Amount** field.
-2. Enter the interest rate in the **Interest Rate** field (e.g., 1.5 or 2.75).
+2. Enter the interest rate in the **Interest Rate.
 3. Select the number of months for repayment in the **Installment Number** field.
 4. Click the **Calculate** button to view your repayment plan.
